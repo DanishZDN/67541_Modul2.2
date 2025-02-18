@@ -307,7 +307,7 @@ private fun HomeFloatingActionButton(
                 contentDescription = null
             )
             // Toggle the visibility of the content with animation.
-            // TODO 2-1: Animate this visibility change.
+            // TODO 2-1: Animate this visibility change. // done
             if (extended) {
                 Text(
                     text = stringResource(R.string.edit),
@@ -325,14 +325,24 @@ private fun HomeFloatingActionButton(
 @Composable
 private fun EditMessage(shown: Boolean) {
     // TODO 2-2: The message should slide down from the top on appearance and slide up on
-    //           disappearance.
+    //           disappearance. // done
     AnimatedVisibility(
-        visible = shown
+        visible = shown,
+        enter = slideInVertically(
+            // Enters by sliding down from offset -fullHeight to 0.
+            initialOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        ),
+        exit = slideOutVertically(
+            // Exits by sliding up from offset 0 to -fullHeight.
+            targetOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 250, easing = FastOutLinearInEasing)
+        )
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.secondary,
-            shadowElevation = 18.dp
+            elevation = 4.dp
         ) {
             Text(
                 text = stringResource(R.string.edit_message),
@@ -340,7 +350,6 @@ private fun EditMessage(shown: Boolean) {
             )
         }
     }
-}
 
 /**
  * Returns whether the lazy list is currently scrolling up.
